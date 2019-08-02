@@ -1,0 +1,16 @@
+*.o
+\#
+.deps
+Makefile
+.idea
+config.log
+config.status
+am--include-marker
+*.a
+autom4te.cache/
+data/prboom-plus.wad
+data/rdatawad
+src/prboom-plus
+src/prboom-plus-game-server
+stamp-h1
+config.h
