@@ -1,3 +1,22 @@
+My Changes
+---
+I've just been experimenting for fun with the DOOM engine and have enabled
+some fun behaviors:
+
+ * missiles go through teleporters with momentum preserved
+ * Spider Mastermind and Cyberdemon are now able to be resurrected by arch-viles
+
+Wish list:
+
+ * better teleport effect - fizzle in batches of pixels of sprite over time
+
+Enjoy!
+Jim Dunne
+2019-08-02
+
+Original Readme
+---
+
 PrBoom 2.5.1.4
 
 PrBoom is a version of the classic 3D shoot'em'up game Doom, originally

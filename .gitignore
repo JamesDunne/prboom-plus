@@ -1,12 +1,13 @@
+.DS_Store
 *.o
+*.a
 \#
+am--include-marker
 .deps
-Makefile
 .idea
 config.log
 config.status
-am--include-marker
-*.a
+Makefile
 autom4te.cache/
 data/prboom-plus.wad
 data/rdatawad
