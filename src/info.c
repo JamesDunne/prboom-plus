@@ -1235,6 +1235,27 @@ state_t states[NUMSTATES] = {
   {SPR_PLAY,21,5,NULL,S_PLAY_GDIE9,0,0},        // S_PLAY_GDIE8
   {SPR_PLAY,22,-1,NULL,S_NULL,0,0},             // S_PLAY_GDIE9
 
+  {SPR_SPID,18,5,NULL,S_SPID_RAISE2,0,0},  // S_SPID_RAISE1
+  {SPR_SPID,17,5,NULL,S_SPID_RAISE3,0,0},  // S_SPID_RAISE2
+  {SPR_SPID,16,5,NULL,S_SPID_RAISE4,0,0},  // S_SPID_RAISE3
+  {SPR_SPID,15,5,NULL,S_SPID_RAISE5,0,0},  // S_SPID_RAISE4
+  {SPR_SPID,14,5,NULL,S_SPID_RAISE6,0,0},  // S_SPID_RAISE5
+  {SPR_SPID,13,5,NULL,S_SPID_RAISE7,0,0},  // S_SPID_RAISE6
+  {SPR_SPID,12,5,NULL,S_SPID_RAISE8,0,0},  // S_SPID_RAISE7
+  {SPR_SPID,11,5,NULL,S_SPID_RAISE9,0,0},  // S_SPID_RAISE8
+  {SPR_SPID,10,5,NULL,S_SPID_RAISE10,0,0}, // S_SPID_RAISE9
+  {SPR_SPID, 9,5,NULL,S_SPID_RUN1,0,0},    // S_SPID_RAISE10
+
+  {SPR_CYBR,15,5,NULL,S_CYBER_RAISE2,0,0},  // S_CYBER_RAISE1
+  {SPR_CYBR,14,5,NULL,S_CYBER_RAISE3,0,0},  // S_CYBER_RAISE2
+  {SPR_CYBR,13,5,NULL,S_CYBER_RAISE4,0,0},  // S_CYBER_RAISE3
+  {SPR_CYBR,12,5,NULL,S_CYBER_RAISE5,0,0},  // S_CYBER_RAISE4
+  {SPR_CYBR,11,5,NULL,S_CYBER_RAISE6,0,0},  // S_CYBER_RAISE5
+  {SPR_CYBR,10,5,NULL,S_CYBER_RAISE7,0,0},  // S_CYBER_RAISE6
+  {SPR_CYBR, 9,5,NULL,S_CYBER_RAISE8,0,0},  // S_CYBER_RAISE7
+  {SPR_CYBR, 8,5,NULL,S_CYBER_RAISE9,0,0},  // S_CYBER_RAISE8
+  {SPR_CYBR, 7,5,NULL,S_CYBER_RUN1,0,0},    // S_CYBER_RAISE9
+
 };
 
 // ********************************************************************
@@ -1779,7 +1800,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {
     0,    // damage
     sfx_dmact,    // activesound
     MF_SOLID|MF_SHOOTABLE|MF_COUNTKILL,   // flags
-    S_NULL    // raisestate
+    S_SPID_RAISE1    // raisestate
   },
 
   {   // MT_BABY
@@ -1831,7 +1852,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {
     0,    // damage
     sfx_dmact,    // activesound
     MF_SOLID|MF_SHOOTABLE|MF_COUNTKILL,   // flags
-    S_NULL    // raisestate
+    S_CYBER_RAISE1    // raisestate
   },
 
   {   // MT_PAIN
