@@ -61,13 +61,15 @@ static mobj_t* P_TeleportDestination(line_t* line)
 
 static int P_AdjustThingPostTeleport(line_t *line, mobj_t *thing, mobj_t *m)
 {
-    fixed_t z = thing->z - thing->floorz;
+    //fixed_t z = thing->z - thing->floorz;
 
     // Get the angle between the exit thing and source linedef.
     // Rotate 90 degrees, so that walking perpendicularly across
     // teleporter linedef causes thing to exit in the direction
     // indicated by the exit thing.
-    angle_t rotation = m->angle - (R_PointToAngle2(0, 0, line->dx, line->dy) + ANG90);
+    //angle_t rotation = (m->angle - (R_PointToAngle2(0, 0, line->dx, line->dy) + ANG90)) - thing->angle;
+
+    angle_t rotation = (m->angle - thing->angle);
 
     // Sine, cosine of angle adjustment
     fixed_t s = finesine[rotation>>ANGLETOFINESHIFT];
@@ -85,7 +87,8 @@ static int P_AdjustThingPostTeleport(line_t *line, mobj_t *thing, mobj_t *m)
     thing->angle += rotation;
 
     // Adjust z position to be same height above ground as before
-    thing->z = z + thing->floorz;
+    //thing->z = z + thing->floorz;
+    thing->z = thing->floorz + 4*8*FRACUNIT;
 
     // Rotate thing's momentum to come out of exit just like it entered
     thing->momx = FixedMul(momx, c) - FixedMul(momy, s);
