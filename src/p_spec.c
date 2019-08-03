@@ -1248,7 +1248,10 @@ void P_CrossSpecialLine(line_t *line, int side, mobj_t *thing)
       case MT_TROOPSHOT:
       case MT_HEADSHOT:
       case MT_BRUISERSHOT:
-        return;
+        // Only non-monster teleporting special is allowed:
+        if (line->special != 39 && line->special != 97) {
+            return;
+        }
         break;
 
       default: break;

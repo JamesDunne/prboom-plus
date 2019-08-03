@@ -58,6 +58,42 @@ static mobj_t* P_TeleportDestination(line_t* line)
   }
   return NULL;
 }
+
+static int P_AdjustThingPostTeleport(line_t *line, mobj_t *thing, mobj_t *m)
+{
+    fixed_t z = thing->z - thing->floorz;
+
+    // Get the angle between the exit thing and source linedef.
+    // Rotate 90 degrees, so that walking perpendicularly across
+    // teleporter linedef causes thing to exit in the direction
+    // indicated by the exit thing.
+    angle_t rotation = m->angle - (R_PointToAngle2(0, 0, line->dx, line->dy) + ANG90);
+
+    // Sine, cosine of angle adjustment
+    fixed_t s = finesine[rotation>>ANGLETOFINESHIFT];
+    fixed_t c = finecosine[rotation>>ANGLETOFINESHIFT];
+
+    // Momentum of thing crossing teleporter linedef
+    fixed_t momx = thing->momx;
+    fixed_t momy = thing->momy;
+
+    // Attempt to teleport, aborting if blocked
+    if (!P_TeleportMove(thing, m->x, m->y, false)) /* killough 8/9/98 */
+        return false;
+
+    // Rotate thing according to difference in angles
+    thing->angle += rotation;
+
+    // Adjust z position to be same height above ground as before
+    thing->z = z + thing->floorz;
+
+    // Rotate thing's momentum to come out of exit just like it entered
+    thing->momx = FixedMul(momx, c) - FixedMul(momy, s);
+    thing->momy = FixedMul(momy, c) + FixedMul(momx, s);
+
+    return true;
+}
+
 //
 // TELEPORTATION
 //
@@ -70,7 +106,7 @@ int EV_Teleport(line_t *line, int side, mobj_t *thing)
   // don't teleport missiles
   // Don't teleport if hit back of line,
   //  so you can get out of teleporter.
-  if (side || thing->flags & MF_MISSILE)
+  if (side /*|| thing->flags & MF_MISSILE*/)
     return 0;
 
   // killough 1/31/98: improve performance by using
@@ -85,11 +121,25 @@ int EV_Teleport(line_t *line, int side, mobj_t *thing)
           if (player && player->mo != thing)
             player = NULL;
 
-          if (!P_TeleportMove(thing, m->x, m->y, false)) /* killough 8/9/98 */
-            return 0;
+          if (!(thing->flags & MF_MISSILE)) {
+              if (!P_TeleportMove(thing, m->x, m->y, false)) /* killough 8/9/98 */
+                return 0;
 
-          if (compatibility_level != finaldoom_compatibility)
-            thing->z = thing->floorz;
+              if (compatibility_level != finaldoom_compatibility)
+                thing->z = thing->floorz;
+
+              /* don't move for a bit
+               * cph - DEMOSYNC - BOOM had (player) here? */
+              if (thing->player)
+                thing->reactiontime = 18;
+
+              thing->angle = m->angle;
+
+              thing->momx = thing->momy = thing->momz = 0;
+          } else {
+              if (!P_AdjustThingPostTeleport(line, thing, m))
+                return 0;
+          }
 
           if (player)
             player->viewz = thing->z + player->viewheight;
@@ -104,15 +154,6 @@ int EV_Teleport(line_t *line, int side, mobj_t *thing)
                                     20*finesine[m->angle>>ANGLETOFINESHIFT],
                                    thing->z, MT_TFOG),
                        sfx_telept);
-
-    /* don't move for a bit
-     * cph - DEMOSYNC - BOOM had (player) here? */
-          if (thing->player)
-            thing->reactiontime = 18;
-
-          thing->angle = m->angle;
-
-          thing->momx = thing->momy = thing->momz = 0;
 
     /* killough 10/98: kill all bobbing momentum too */
     if (player)
